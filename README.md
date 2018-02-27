@@ -1,4 +1,4 @@
-# Bditor
+# Beditor
 Console Based Text Editor For Windows Platform, Written In C.
 
 # Run
