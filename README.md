@@ -7,7 +7,7 @@ once a file is opened, edit it as you wish and press ESC key to exit and save.<b
 
 # Screenshots
 ![Screen1](https://i.imgur.com/1O3uQBP.png)
-![Screen2](https://imgur.com/FUNANFi)
+![Screen2](https://i.imgur.com/FUNANFi.png)
 
 
 # Compile
