@@ -13,6 +13,4 @@ once a file is opened, edit it as you wish and press ESC key to exit and save.<b
 # Compile
 Make sure you have MinGW/Cygwin GCC compiler installed before running Makefile.<br><br>
 
-# TODO:<br>
-* Arrows Support<br>
 
