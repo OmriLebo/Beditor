@@ -43,26 +43,6 @@ void displayContent(List *list)
     }
 }
 
-int lineLen(List *content, int line)
-{
-    int i = 0, len = 0;
-    Node *temp = NULL;
-    for(temp = content->head; NULL != temp; temp = temp->next)
-    {
-        if(i == line)
-        {
-            if(temp->data == '\n'){
-                return len;
-            }
-            ++len;
-        }
-        else if(temp->data == '\n' )
-            ++i;
-    }
-    return -1;
-}
-
-
 int readFile(FILE *fp, List *content, Point *CursorPos)
 {
     char character;
@@ -89,19 +69,118 @@ int readFile(FILE *fp, List *content, Point *CursorPos)
 
 int editContent(List *content, Point *CursorPos)
 {
+
     unsigned char key;
     while(ESC != (key = _getch()))
     {
-        
-        if(key == BACKSPACEKEY)
+        if(key == ARROWKEY)
         {
-            if(CursorPos->x == 0 && CursorPos->y == 0)
+            key = _getch();
+            if(key == ARROWUPKEY)//UP
             {
-                ;
+                if(CursorPos->y == 0)
+                {
+                    //At top line
+                    continue;
+                }
+                else if(CursorPos->x > getLineLen(content, CursorPos->y))
+                {
+                    CursorPos->x = getLineLen(content, CursorPos->y);
+                    --CursorPos->y;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+                else
+                {
+                    --CursorPos->y;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+            }
+            else if(key == ARROWDOWNKEY)//DOWN
+            {
+                if(CursorPos->y == getHeight(content))
+                {
+                    //At lowest line
+                    continue;
+                }
+                else if(CursorPos->x > getLineLen(content, CursorPos->y + 2))
+                {
+                    CursorPos->x = getLineLen(content, CursorPos->y + 2);
+                    ++CursorPos->y;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+                else
+                {
+                    ++CursorPos->y;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+
+            }
+            else if(key == ARROWRIGHTKEY) //RIGHT
+            {
+                if((CursorPos->y == getHeight(content)) && (CursorPos->x == getLineLen(content, CursorPos->y + 1)))
+                {
+                    //At end of file
+                    continue;
+                }
+                else if(CursorPos->x == getLineLen(content, CursorPos->y + 1))
+                {
+                    //At end of line, but not end of file
+                    CursorPos->x = 0;
+                    ++CursorPos->y;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+                else
+                {
+                    ++CursorPos->x;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+            }
+            else if(key == ARROWLEFTKEY)//LEFT
+            {
+                if((CursorPos->x == 0) && (CursorPos->y == 0))
+                {
+                    //At start of file
+                    continue;
+                }
+                else if(CursorPos->x == 0)
+                {
+                    //At start of line, but not start of file
+                    CursorPos->x = getLineLen(content, CursorPos->y);
+                    --CursorPos->y;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+                else
+                {
+                    --CursorPos->x;
+                    CursorPos->index = getIndex(content, CursorPos);
+                    gotoPos(CursorPos);
+                    continue;
+                }
+            }
+        }
+        else if(key == BACKSPACEKEY) //TODO check bug when deleting after arrow job
+        {
+            if((CursorPos->x == 0) && (CursorPos->y == 0))
+            {
+                continue;
             }
             else if(CursorPos->x == 0)
             {
-                CursorPos->x = lineLen(content, --CursorPos->y);
+                CursorPos->x = getLineLen(content, CursorPos->y);
                 removeNodeByIndex(content, --CursorPos->index);
             }
             else
@@ -131,17 +210,14 @@ int editContent(List *content, Point *CursorPos)
                 CursorPos->x = 0;
                 ++CursorPos->y;
                 ++CursorPos->index;
-
             }
             else
             {
                 insertNode(content, nodeCtor(key), CursorPos->index);
                 ++CursorPos->x;
                 ++CursorPos->index;
-
             }
         }
-
         displayContent(content);
         gotoPos(CursorPos);
     }
@@ -183,6 +259,29 @@ int getHeight(List *content)
             ++height;
     }
     return height;
+}
+
+int getLineLen(List *content, int lineNum)
+{
+    int i = 1;
+    int linelen = 0;
+    Node *temp;
+    for(temp = content->head; temp != NULL; temp = temp->next)
+    {
+        if(i == lineNum)
+        {
+            if(temp->data != '\n')
+                ++linelen;
+            else
+                break;
+        }
+        else if(i < lineNum)
+        {
+            if(temp->data == '\n')
+                ++i;
+        }
+    }
+    return linelen;
 }
 
 int getIndex(List *content, Point *CursorPos)
