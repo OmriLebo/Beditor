@@ -6,8 +6,8 @@ Run using beditor.exe from the command-line with a file argument, e.g. beditor /
 once a file is opened, edit it as you wish and press ESC key to exit and save.<br>
 
 # Screenshots
-![Screen1](https://i.imgur.com/NVJAaSK.png)
-![Screen2](https://i.imgur.com/OxnFpmF.png)
+![Screen1](https://i.imgur.com/1O3uQBP.png)
+![Screen2](https://i.imgur.com/FUNANFi.png)
 
 
 # Compile
