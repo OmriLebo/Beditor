@@ -181,6 +181,7 @@ int editContent(List *content, Point *CursorPos)
             else if(CursorPos->x == 0)
             {
                 CursorPos->x = getLineLen(content, CursorPos->y);
+                --CursorPos->y;
                 removeNodeByIndex(content, --CursorPos->index);
             }
             else
@@ -218,6 +219,7 @@ int editContent(List *content, Point *CursorPos)
                 ++CursorPos->index;
             }
         }
+
         displayContent(content);
         gotoPos(CursorPos);
     }
