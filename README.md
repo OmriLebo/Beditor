@@ -1,5 +1,6 @@
 # Beditor
 Console Based Text Editor For Windows Platform, Written In C.
+<h4>This project is soon to be deprecated as I am working on a new and improved version atm.</h4>
 
 # Run
 Run using beditor.exe from the command-line with a file argument, e.g. beditor /Users/Omri/Desktop/Myfile.txt<br>
